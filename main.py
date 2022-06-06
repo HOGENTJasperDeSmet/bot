@@ -46,7 +46,7 @@ class MyClient(discord.Client):
         response = requests.get('https://forum.thotsbay.com/threads/sofia-gomez-sofiiiagomez.8406/page-999', cookies=cookies, headers=headers)
         doc = BeautifulSoup(response.content, "html.parser")
 
-        channel = self.get_channel(983068813186699264)
+        channel = self.get_channel(os.environ["channelkey"])
 
 
         latestPost = doc.findAll("div", class_="bbWrapper")[-1]
@@ -59,10 +59,13 @@ class MyClient(discord.Client):
                 try:
                     await channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("/ifr","").replace("\"]",""))
                 except:
-                    print("i crashed")   
+                    print("i pooped my patnsu")   
             img = latestPost("img")
             for x in img:
                 await channel.send(x["src"])
+            link = latestPost("a")
+            for x in link:
+                await channel.send(x["href"])
         self.lastPosted = latestPost
         
 
