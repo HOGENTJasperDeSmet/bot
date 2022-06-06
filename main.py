@@ -69,7 +69,7 @@ class MyClient(discord.Client):
 
 client = MyClient()
 
-client.run("OTgzMDI3ODkzODEyNzQ4MzE5.GFU17s.AvAQDViAh-K76LLZBNbs9yXnQsPiKJ60_57h-0")
+client.run(os.environ['discordkey'])
 
 
 
