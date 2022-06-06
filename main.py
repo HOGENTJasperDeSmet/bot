@@ -46,7 +46,7 @@ class MyClient(discord.Client):
         response = requests.get('https://forum.thotsbay.com/threads/sofia-gomez-sofiiiagomez.8406/page-999', cookies=cookies, headers=headers)
         doc = BeautifulSoup(response.content, "html.parser")
 
-        channel = self.get_channel(os.environ["channelkey"])
+        channel = self.get_channel(983068813186699264)
 
 
         latestPost = doc.findAll("div", class_="bbWrapper")[-1]
