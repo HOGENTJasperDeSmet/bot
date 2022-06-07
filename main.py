@@ -4,21 +4,14 @@ from bs4 import BeautifulSoup
 
 import discord
 from discord.ext import tasks, commands
-
-
-
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
-        self.lastPosted = ""
         super().__init__(*args, **kwargs)
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
         self.printer.start()
 
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
-
-    @tasks.loop(seconds=60.0)
+    @tasks.loop(seconds=5.0)
     async def printer(self):
         
         cookies = {
@@ -45,33 +38,44 @@ class MyClient(discord.Client):
         }
 
         response = requests.get('https://forum.thotsbay.com/threads/sofia-gomez-sofiiiagomez.8406/page-999', cookies=cookies, headers=headers)
+
         doc = BeautifulSoup(response.content, "html.parser")
 
         channel = self.get_channel(983338447299285014)
 
+        lastDiscordMessage = await channel.fetch_message(channel.last_message_id)
+        
+        newMessage = "⚠ New sofia alert! \n"
 
         latestPost = doc.findAll("div", class_="bbWrapper")[-1]
-        if(latestPost != self.lastPosted):
-            saint = latestPost("iframe")
-            for x in saint:
-                
-                await channel.send(x["src"])
-            gfycat = latestPost("span")
-            for x in gfycat:
-                try:
-                    if(x.contains("redgif")):
-                        channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("\"]",""))
-                    else:
-                        await channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("/ifr","").replace("\"]",""))
-                except:
-                    print("i pooped my patnsu")   
-            img = latestPost("img")
-            for x in img:
-                await channel.send(x["src"])
-            link = latestPost("a")
-            for x in link:
-                await channel.send(x["href"])
-        self.lastPosted = latestPost
+        saint = latestPost("iframe")
+        for x in saint:
+            newMessage += x["src"] + "\n"  
+
+        gfycat = latestPost(attrs={"data-s9e-mediaembed-iframe":True})
+        for x in gfycat:
+            try:
+                print("ehlo")
+                if "redgif" in x["data-s9e-mediaembed-iframe"]:
+                    newMessage += x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("\"]","") + "\n" 
+                else:
+                    newMessage += x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("/ifr","").replace("\"]","") + "\n" 
+            except Exception as e:
+                print("Error for x: " + x.prettify())  
+
+        img = latestPost("img")
+
+        for x in img:
+            newMessage += x["src"] + "\n" 
+        link = latestPost("a")
+
+        for x in link:
+            newMessage += x["href"] + "\n" 
+
+        if(lastDiscordMessage.content != newMessage.strip()):
+            await channel.send(newMessage)
+
+
         
 
 
