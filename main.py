@@ -20,7 +20,7 @@ class MyClient(discord.Client):
 
     @tasks.loop(seconds=60.0)
     async def printer(self):
-        print("hello")
+        
         cookies = {
             'xf_user': '750588%2CmW9DUqmniJfMf_Es4OBQSATc_Uc__Oi8-5YFVp3g',
             'forum.thotsbay.com_80b1e75de6b311375acaf5ac023ee1a7_evc': '%5B%2251c5cbd8ab1df296bfea7eb29cb5339a%22%5D',
@@ -54,11 +54,15 @@ class MyClient(discord.Client):
         if(latestPost != self.lastPosted):
             saint = latestPost("iframe")
             for x in saint:
+                
                 await channel.send(x["src"])
             gfycat = latestPost("span")
             for x in gfycat:
                 try:
-                    await channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("/ifr","").replace("\"]",""))
+                    if(x.contains("redgif")):
+                        channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("\"]",""))
+                    else:
+                        await channel.send(x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("/ifr","").replace("\"]",""))
                 except:
                     print("i pooped my patnsu")   
             img = latestPost("img")
