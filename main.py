@@ -55,7 +55,6 @@ class MyClient(discord.Client):
         gfycat = latestPost(attrs={"data-s9e-mediaembed-iframe":True})
         for x in gfycat:
             try:
-                print("ehlo")
                 if "redgif" in x["data-s9e-mediaembed-iframe"]:
                     newMessage += x["data-s9e-mediaembed-iframe"].split(",")[5].replace("\"\/\/","https://").replace("\\","").replace("\"]","") + "\n" 
                 else:
