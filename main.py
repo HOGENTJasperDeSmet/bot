@@ -18,8 +18,9 @@ class MyClient(discord.Client):
     async def on_message(self, message):
         print('Message from {0.author}: {0.content}'.format(message))
 
-    @tasks.loop(seconds=5.0)
+    @tasks.loop(seconds=60.0)
     async def printer(self):
+        print("hello")
         cookies = {
             'xf_user': '750588%2CmW9DUqmniJfMf_Es4OBQSATc_Uc__Oi8-5YFVp3g',
             'forum.thotsbay.com_80b1e75de6b311375acaf5ac023ee1a7_evc': '%5B%2251c5cbd8ab1df296bfea7eb29cb5339a%22%5D',
