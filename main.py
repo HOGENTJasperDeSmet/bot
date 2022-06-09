@@ -69,8 +69,12 @@ class MyClient(discord.Client):
         link = latestPost("a")
 
         for x in link:
-            newMessage += x["href"] + "\n" 
+            try: 
+                newMessage += x["href"] + "\n" 
+            except Exception as e:
+               print("Error for x: " + x.prettify())  
 
+        print(newMessage)
         if(lastDiscordMessage.content != newMessage.strip()):
             await channel.send(newMessage)
 
