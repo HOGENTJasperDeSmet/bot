@@ -62,11 +62,11 @@ class MyClient(discord.Client):
                 print("Error for x: " + x.prettify())  
 
         img = latestPost("img")
+        link = latestPost("a")
 
         for x in img:
             try:
                 newMessage += x["src"] + "\n" 
-                link = latestPost("a")
             except Exception as e:
                  print("Error for x: " + x.prettify())  
 
