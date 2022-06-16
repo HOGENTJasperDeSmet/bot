@@ -47,11 +47,10 @@ class MyClient(discord.Client):
         
         newMessage = "⚠ New sofia alert! \n"
 
-        latestPost = doc.findAll("div", class_="bbWrapper")[-1]
+        latestPost = doc.findAll("article")[-1]
         saint = latestPost("iframe")
         for x in saint:
             newMessage += x["src"] + "\n"  
-
         gfycat = latestPost(attrs={"data-s9e-mediaembed-iframe":True})
         for x in gfycat:
             try:
@@ -65,8 +64,11 @@ class MyClient(discord.Client):
         img = latestPost("img")
 
         for x in img:
-            newMessage += x["src"] + "\n" 
-        link = latestPost("a")
+            try:
+                newMessage += x["src"] + "\n" 
+                link = latestPost("a")
+            except Exception as e:
+                 print("Error for x: " + x.prettify())  
 
         for x in link:
             try: 
@@ -74,8 +76,8 @@ class MyClient(discord.Client):
             except Exception as e:
                print("Error for x: " + x.prettify())  
 
-        print(newMessage)
         if(lastDiscordMessage.content != newMessage.strip()):
+            #print(newMessage)
             await channel.send(newMessage)
 
 
